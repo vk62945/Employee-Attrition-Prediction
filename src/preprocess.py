@@ -6,46 +6,51 @@ from sklearn.preprocessing import (
     OneHotEncoder,
     LabelEncoder
 )
-
 from sklearn.compose import ColumnTransformer
 
 
-def prepare_data(df):
+def prepare_data(df : pd.DataFrame):
     """
-    Clean the dataset and prepare X and y.
+    Prepare dataset before training.
     """
-
+    df = df.copy()
     # Drop unnecessary columns
-    df = df.drop(
-        columns=[
-            "EmployeeNumber",
-            "EmployeeCount",
-            "Over18",
-            "StandardHours"
-        ]
+    columns_to_drop = [
+        "EmployeeNumber",
+        "EmployeeCount",
+        "Over18",
+        "StandardHours"
+    ]
+
+    df.drop(
+        columns = columns_to_drop,
+        inplace = True
     )
 
     # Encode target column
-    le = LabelEncoder()
-    df["Attrition"] = le.fit_transform(df["Attrition"])
+    label_encoder = LabelEncoder()
 
-    # Separate features and target
-    x = df.drop("Attrition", axis=1)
-    y = df["Attrition"]
+    df["Attrition"] = label_encoder.fit_transform(
+        df["Attrition"]
+    )
 
-    return x, y
+    return df
 
+def get_feature_columns(x: pd.DataFrame):
+    numerical_columns = x.select_dtypes(
+        include=["int64"]
+    ).columns.tolist()
 
-def build_preprocessor(x):
-    """
-    Create preprocessing pipeline.
-    """
+    categorical_columns = x.select_dtypes(
+        include=["object"]
+    ).columns.tolist()
 
-    # Numerical columns
-    numerical_columns = x.select_dtypes(include=["int64"]).columns
+    return numerical_columns, categorical_columns
 
-    # Categorical columns
-    categorical_columns = x.select_dtypes(include=["object"]).columns
+def build_preprocessor(
+    numerical_columns,
+    categorical_columns
+):
 
     # Column Transformer
     preprocessor = ColumnTransformer(
@@ -57,7 +62,10 @@ def build_preprocessor(x):
             ),
             (
                 "cat",
-                OneHotEncoder(drop="first"),
+                OneHotEncoder(
+                    drop="first",
+                    handle_unknown="ignore"
+                ),
                 categorical_columns
             )
         ]
