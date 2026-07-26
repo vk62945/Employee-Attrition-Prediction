@@ -8,6 +8,14 @@ if str(PROJECT_ROOT) not in sys.path:
     sys.path.append(str(PROJECT_ROOT))
 
 from src.predict import predict_attrition
+from src.predict import load_prediction_model
+
+@st.cache_resource
+def get_model():
+    """
+    Load the trained pipeline once and cache it.
+    """
+    return load_prediction_model()
 
 st.set_page_config(
     page_title = "Employee Attrition Prediction",
@@ -289,6 +297,8 @@ employee_data = {
     "YearsWithCurrManager": years_with_current_manager
 }
 
+model = get_model()
+
 predict_button = st.button(
     "🔍 Predict Attrition",
     use_container_width=True
@@ -296,7 +306,7 @@ predict_button = st.button(
 
 if predict_button:
     with st.spinner("Predicting..."):
-        result = predict_attrition(employee_data)
+        result = predict_attrition(model, employee_data)
 
     prediction = result["prediction"]
     confidence = result["confidence"]
@@ -304,33 +314,76 @@ if predict_button:
     st.divider()
 
     st.subheader("Prediction Result")
+    result_col1, result_col2 = st.columns(2)
 
+    with result_col1:
+        if prediction == "Yes":
+
+            st.error(
+                "⚠️ Employee is likely to leave the company."
+            )
+        else:
+            st.success(
+                "✅ Employee is likely to stay with the company."
+            )
+    with result_col2:
+        st.metric(
+            label="Confidence",
+            value=f"{confidence:.2f}%"
+        )
+    st.progress(confidence / 100)
+    st.subheader("Interpretation")
     if prediction == "Yes":
 
-        st.error(
-            f"""
-            ⚠️ Employee is likely to leave the company.
+        st.warning(
+            """
+            The model predicts that this employee has a higher likelihood of leaving the company.
 
-            **Confidence:** {confidence:.2f}%
+            HR may consider reviewing:
+
+            • Career growth opportunities
+
+            • Compensation
+
+            • Work-life balance
+
+            • Employee engagement
             """
         )
 
     else:
 
-        st.success(
-            f"""
-            ✅ Employee is likely to stay with the company.
+        st.info(
+            """
+            The model predicts that this employee is likely to stay with the company.
 
-            **Confidence:** {confidence:.2f}%
+            Continue maintaining:
+
+            • Positive work environment
+
+            • Employee engagement
+
+            • Career development
             """
         )
-
-    with st.expander("Prediction Details"):
-
+    with st.expander("Sumitted Employee Details"):
+        st.json(employee_data)
+    
+    with st.expander("Raw Prediction Details"):
         st.json(result)
 
 st.divider()
 
 st.caption(
-    "Built using Python, Scikit-Learn and Streamlit"
+    """
+    Employee Attrition Prediction System
+
+    Built with:
+    - Python
+    - Scikit-Learn
+    - Streamlit
+    - Logistic Regression
+
+    Developed as an end-to-end Machine Learning project.
+    """
 )

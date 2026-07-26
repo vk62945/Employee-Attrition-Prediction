@@ -8,10 +8,8 @@ def load_prediction_model():
     """
     return load_model(MODEL_PATH)
 
-def predict_attrition(input_data: dict):
+def predict_attrition(model, input_data: dict):
     input_df = pd.DataFrame([input_data])
-
-    model = load_prediction_model()
     prediction = model.predict(input_df)
 
     probability = model.predict_proba(input_df)
