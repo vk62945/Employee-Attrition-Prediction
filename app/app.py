@@ -1,4 +1,13 @@
+from pathlib import Path
+import sys
 import streamlit as st
+
+PROJECT_ROOT = Path(__file__).resolve().parent.parent
+
+if str(PROJECT_ROOT) not in sys.path:
+    sys.path.append(str(PROJECT_ROOT))
+
+from src.predict import predict_attrition
 
 st.set_page_config(
     page_title = "Employee Attrition Prediction",
@@ -279,6 +288,47 @@ employee_data = {
     "YearsSinceLastPromotion": years_since_last_promotion,
     "YearsWithCurrManager": years_with_current_manager
 }
+
+predict_button = st.button(
+    "🔍 Predict Attrition",
+    use_container_width=True
+)
+
+if predict_button:
+    with st.spinner("Predicting..."):
+        result = predict_attrition(employee_data)
+
+    prediction = result["prediction"]
+    confidence = result["confidence"]
+
+    st.divider()
+
+    st.subheader("Prediction Result")
+
+    if prediction == "Yes":
+
+        st.error(
+            f"""
+            ⚠️ Employee is likely to leave the company.
+
+            **Confidence:** {confidence:.2f}%
+            """
+        )
+
+    else:
+
+        st.success(
+            f"""
+            ✅ Employee is likely to stay with the company.
+
+            **Confidence:** {confidence:.2f}%
+            """
+        )
+
+    with st.expander("Prediction Details"):
+
+        st.json(result)
+
 st.divider()
 
 st.caption(
