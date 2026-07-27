@@ -1,8 +1,36 @@
 # 📊 Employee Attrition Prediction System
+![Live Demo](https://img.shields.io/badge/Live-Demo-success?style=for-the-badge&logo=streamlit)](https://employee-attrition-prediction-pro.streamlit.app/)
+![Python](https://img.shields.io/badge/Python-3.13-blue?style=for-the-badge&logo=python)
+![Scikit-Learn](https://img.shields.io/badge/Scikit--Learn-ML-orange?style=for-the-badge&logo=scikitlearn)
+![Streamlit](https://img.shields.io/badge/Streamlit-App-red?style=for-the-badge&logo=streamlit)
+![License](https://img.shields.io/badge/License-MIT-green?style=for-the-badge)
+
+## 🚀 Live Demo
+
+👉 **Try the application here:**  
+**https://employee-attrition-prediction-pro.streamlit.app/**
 
 An end-to-end Machine Learning project that predicts whether an employee is likely to leave a company using the IBM HR Analytics Employee Attrition dataset.
 
 The project includes data preprocessing, feature engineering, model evaluation, production-ready code refactoring, and deployment through a Streamlit web application.
+
+## 📷 Application Preview
+
+### Home Page
+
+![Home Page](screenshots/home_page.png)
+
+---
+
+### Employee Input Form
+
+![Input Form](screenshots/input_form.png)
+
+---
+
+### Prediction Result
+
+![Prediction](screenshots/prediction_result.png)
 
 ## ✨ Features
 
