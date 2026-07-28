@@ -125,8 +125,9 @@ streamlit run app/app.py
 
 **Vivek Kumar**
 
-AWS Data Engineer | Aspiring AI Engineer
+AWS Data Engineer at TCS | Building AI & Machine Learning Projects
 
-LinkedIn: 
+## 👨‍💻 Connect with Me
 
-GitHub: 
+[![LinkedIn](https://img.shields.io/badge/LinkedIn-Vivek%20Kumar-blue?logo=linkedin&logoColor=white)](https://www.linkedin.com/in/vivek-kumar-proai/)
+[![GitHub](https://img.shields.io/badge/GitHub-vk62945-black?logo=github&logoColor=white)](https://github.com/vk62945)
